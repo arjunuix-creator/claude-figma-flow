@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1440" />
+  <title>Login</title>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 1440px;
+      height: 1073px;
+      display: flex;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f4f6fb;
+    }
+
+    /* Left panel */
+    .left-panel {
+      width: 520px;
+      height: 1073px;
+      background: linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 48px;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 56px;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      background: #5c6ef8;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-icon svg { width: 22px; height: 22px; }
+
+    .brand-name {
+      font-size: 22px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.3px;
+    }
+
+    .hero-text {
+      text-align: center;
+    }
+
+    .hero-text h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.25;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero-text p {
+      font-size: 15px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.7;
+    }
+
+    .illustration {
+      margin-top: 56px;
+      width: 320px;
+      height: 200px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stats {
+      margin-top: 48px;
+      display: flex;
+      gap: 32px;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    /* Right panel */
+    .right-panel {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px;
+    }
+
+    .login-card {
+      width: 440px;
+    }
+
+    .login-header {
+      margin-bottom: 40px;
+    }
+
+    .login-header h2 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #111827;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    .login-header p {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .login-header p a {
+      color: #ef4444;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    /* Social login */
+    .social-buttons {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .social-btn {
+      flex: 1;
+      height: 44px;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 10px;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #374151;
+      cursor: pointer;
+    }
+
+    .social-btn svg { width: 18px; height: 18px; }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: #e5e7eb;
+    }
+
+    .divider-text {
+      font-size: 12px;
+      color: #9ca3af;
+      white-space: nowrap;
+    }
+
+    /* Form */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+
+    .form-input {
+      width: 100%;
+      height: 46px;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 0 16px;
+      font-size: 14px;
+      color: #111827;
+      background: #ffffff;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .form-input:focus {
+      border-color: #5c6ef8;
+    }
+
+    .form-input.has-value {
+      border-color: #d1d5db;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #9ca3af;
+    }
+
+    .form-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .checkbox {
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid #d1d5db;
+      border-radius: 4px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .remember-label {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .forgot-link {
+      font-size: 13px;
+      color: #ef4444;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .submit-btn {
+      width: 100%;
+      height: 48px;
+      background: #d12a14;
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.1px;
+      margin-bottom: 24px;
+    }
+
+    .terms {
+      text-align: center;
+      font-size: 12px;
+      color: #9ca3af;
+      line-height: 1.6;
+    }
+
+    .terms a {
+      color: #6b7280;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Left Panel -->
+  <div class="left-panel">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 11L9 16L18 6" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="brand-name">Nexus</span>
+    </div>
+
+    <div class="hero-text">
+      <h1>Welcome back to your workspace</h1>
+      <p>Sign in to continue where you left off.<br/>Your team is waiting for you.</p>
+    </div>
+
+    <div class="illustration">
+      <svg width="180" height="120" viewBox="0 0 180 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Dashboard mockup -->
+        <rect x="10" y="10" width="160" height="100" rx="8" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+        <rect x="20" y="22" width="60" height="6" rx="3" fill="rgba(255,255,255,0.15)"/>
+        <rect x="20" y="34" width="40" height="4" rx="2" fill="rgba(255,255,255,0.08)"/>
+        <!-- Chart bars -->
+        <rect x="20" y="72" width="12" height="24" rx="2" fill="#5c6ef8" opacity="0.7"/>
+        <rect x="36" y="60" width="12" height="36" rx="2" fill="#5c6ef8" opacity="0.9"/>
+        <rect x="52" y="66" width="12" height="30" rx="2" fill="#5c6ef8" opacity="0.7"/>
+        <rect x="68" y="54" width="12" height="42" rx="2" fill="#5c6ef8"/>
+        <rect x="84" y="62" width="12" height="34" rx="2" fill="#5c6ef8" opacity="0.8"/>
+        <!-- Stats -->
+        <rect x="110" y="50" width="50" height="18" rx="4" fill="rgba(255,255,255,0.07)"/>
+        <rect x="115" y="55" width="20" height="4" rx="2" fill="rgba(255,255,255,0.3)"/>
+        <rect x="115" y="62" width="30" height="3" rx="1.5" fill="rgba(255,255,255,0.15)"/>
+        <rect x="110" y="74" width="50" height="18" rx="4" fill="rgba(255,255,255,0.07)"/>
+        <rect x="115" y="79" width="20" height="4" rx="2" fill="rgba(255,255,255,0.3)"/>
+        <rect x="115" y="86" width="30" height="3" rx="1.5" fill="rgba(255,255,255,0.15)"/>
+      </svg>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value">12k+</div>
+        <div class="stat-label">Users</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">99.9%</div>
+        <div class="stat-label">Uptime</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">4.9★</div>
+        <div class="stat-label">Rating</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel -->
+  <div class="right-panel">
+    <div class="login-card">
+      <div class="login-header">
+        <h2>Sign in to your account</h2>
+        <p>Don't have an account? <a href="#">Create one for free</a></p>
+      </div>
+
+      <!-- Social Login -->
+      <div class="social-buttons">
+        <button class="social-btn">
+          <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+            <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/>
+            <path d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
+            <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+          </svg>
+          Google
+        </button>
+        <button class="social-btn">
+          <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 0C4.03 0 0 4.03 0 9a9.004 9.004 0 006.14 8.548c.45.083.614-.194.614-.432 0-.213-.008-.778-.012-1.528-2.502.544-3.03-1.206-3.03-1.206-.409-1.04-1-1.317-1-1.317-.817-.558.062-.547.062-.547.904.064 1.38.928 1.38.928.802 1.375 2.105.978 2.619.748.082-.582.314-.978.57-1.203-1.998-.228-4.1-1-4.1-4.446 0-.982.35-1.786.926-2.415-.093-.227-.401-1.142.088-2.38 0 0 .755-.242 2.474.922A8.61 8.61 0 019 4.33c.765.003 1.535.103 2.255.303 1.718-1.164 2.472-.922 2.472-.922.49 1.238.182 2.153.09 2.38.576.629.924 1.433.924 2.415 0 3.455-2.106 4.215-4.11 4.438.323.279.61.83.61 1.673 0 1.208-.012 2.182-.012 2.479 0 .24.162.52.618.432A9.004 9.004 0 0018 9c0-4.97-4.03-9-9-9z" fill="#1b1f23"/>
+          </svg>
+          GitHub
+        </button>
+      </div>
+
+      <!-- Divider -->
+      <div class="divider">
+        <div class="divider-line"></div>
+        <span class="divider-text">or sign in with email</span>
+        <div class="divider-line"></div>
+      </div>
+
+      <!-- Form -->
+      <div class="form-group">
+        <label class="form-label">Email address</label>
+        <div class="input-wrapper">
+          <input class="form-input has-value" type="email" value="arjun@example.com" />
+          <span class="input-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 4l6 5 6-5" stroke="#9ca3af" stroke-width="1.5" stroke-linecap="round"/>
+              <rect x="1" y="3" width="14" height="10" rx="2" stroke="#9ca3af" stroke-width="1.5"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="input-wrapper">
+          <input class="form-input" type="password" placeholder="Enter your password" />
+          <span class="input-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="7" width="10" height="7" rx="1.5" stroke="#9ca3af" stroke-width="1.5"/>
+              <path d="M5 7V5a3 3 0 016 0v2" stroke="#9ca3af" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="8" cy="10.5" r="1" fill="#9ca3af"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="remember-me">
+          <div class="checkbox">
+            <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+              <path d="M1 4l3 3 5-6" stroke="#5c6ef8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span class="remember-label">Remember me for 30 days</span>
+        </div>
+        <a class="forgot-link" href="#">Forgot password?</a>
+      </div>
+
+      <button class="submit-btn">Sign in</button>
+
+      <p class="terms">
+        By signing in, you agree to our <a href="#">Terms of Service</a><br/>
+        and <a href="#">Privacy Policy</a>.
+      </p>
+    </div>
+  </div>
+
+</body>
+</html>
