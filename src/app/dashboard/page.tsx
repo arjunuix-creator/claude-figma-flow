@@ -4,10 +4,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { motion, type Variants } from "framer-motion";
+import CountUp from "react-countup";
 import { supabase } from "@/lib/supabaseClient";
 import SpendingChart from "@/components/dashboard/SpendingChart";
 import IncomeExpenseChart from "@/components/dashboard/IncomeExpenseChart";
 import TransactionsTable, { type ExpenseRow } from "@/components/dashboard/TransactionsTable";
+import { DashboardSkeleton } from "@/components/ui/skeleton";
 
 // ─── Framer-motion variants ───────────────────────────────────────────────────
 const containerVariants: Variants = {
@@ -68,10 +70,14 @@ function Badge({ label }: { label: string }) {
 }
 
 // ─── StatCard ─────────────────────────────────────────────────────────────────
-function StatCard({ tone, title, value, subtitle }: {
+function StatCard({ tone, title, value, subtitle, countUp }: {
   tone: "red" | "indigo" | "violet" | "amber";
   title: string; value: string; subtitle: string;
+  countUp?: { end: number; prefix?: string; separator?: string; decimals?: number };
 }) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+
   const glow    = tone === "red" ? "bg-red-500" : tone === "indigo" ? "bg-indigo-500" : tone === "violet" ? "bg-violet-500" : "bg-amber-500";
   const iconBg  = tone === "red" ? "bg-red-500/12" : tone === "indigo" ? "bg-indigo-500/12" : tone === "violet" ? "bg-violet-500/12" : "bg-amber-500/12";
   const hoverShadow = tone === "red"
@@ -97,7 +103,16 @@ function StatCard({ tone, title, value, subtitle }: {
         <div>
           <div className="text-[13px] leading-4 text-slate-600">{title}</div>
           <div className="mt-1 text-[28px] font-bold leading-9 tracking-[-0.5px] text-slate-100 group-hover:text-white transition-colors duration-200">
-            {value}
+            {countUp && mounted ? (
+              <CountUp
+                start={0}
+                end={countUp.end}
+                duration={1.4}
+                separator={countUp.separator ?? ","}
+                prefix={countUp.prefix ?? ""}
+                decimals={countUp.decimals ?? 0}
+              />
+            ) : value}
           </div>
           <div className="mt-1 text-xs font-medium leading-[18px] text-slate-600">{subtitle}</div>
         </div>
@@ -240,6 +255,8 @@ export default function DashboardPage() {
     return { total, avg, count: list.length };
   }, [expenses]);
 
+  const dataLoaded = expenses !== null;
+
   return (
     <div className="min-h-screen bg-[#090c14] text-slate-100">
       <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onLogout={handleLogout} />
@@ -297,9 +314,10 @@ export default function DashboardPage() {
             </div>
           </header>
 
+          {!dataLoaded ? <DashboardSkeleton /> : (
           <main className="px-6 pb-12 pt-8">
 
-            {/* ── Stat cards (stagger) ── */}
+            {/* Stat cards stagger */}
             <motion.section
               className="grid gap-6 md:grid-cols-2 xl:grid-cols-4"
               variants={containerVariants}
@@ -307,10 +325,10 @@ export default function DashboardPage() {
               animate="show"
             >
               {[
-                { tone: "red"    as const, title: "Total Expenses",  value: `$${Math.round(totals.total).toLocaleString()}`, subtitle: `${totals.count} transactions` },
-                { tone: "indigo" as const, title: "Avg per Expense", value: `$${Math.round(totals.avg).toLocaleString()}`,   subtitle: "per entry"                     },
+                { tone: "red"    as const, title: "Total Expenses",  value: `$${Math.round(totals.total).toLocaleString()}`, subtitle: `${totals.count} transactions`, countUp: { end: Math.round(totals.total), prefix: "$", separator: "," } },
+                { tone: "indigo" as const, title: "Avg per Expense", value: `$${Math.round(totals.avg).toLocaleString()}`,   subtitle: "per entry",                    countUp: { end: Math.round(totals.avg),   prefix: "$", separator: "," } },
                 { tone: "violet" as const, title: "Top Category",    value: "Food",                                           subtitle: "most frequent"                  },
-                { tone: "amber"  as const, title: "Active Cards",    value: "3",                                              subtitle: "2 virtual"                      },
+                { tone: "amber"  as const, title: "Active Cards",    value: "3",                                              subtitle: "2 virtual",                    countUp: { end: 3 } },
               ].map((card) => (
                 <motion.div key={card.title} variants={cardVariants}>
                   <StatCard {...card} />
@@ -320,7 +338,7 @@ export default function DashboardPage() {
 
             <section className="mt-8 grid gap-6 xl:grid-cols-[368px_1fr]">
 
-              {/* ── Left column ── */}
+              {/* Left column */}
               <div className="space-y-6">
 
                 {/* Net Worth */}
@@ -375,7 +393,7 @@ export default function DashboardPage() {
 
               </div>
 
-              {/* ── Right column ── */}
+              {/* Right column */}
               <div className="space-y-6">
 
                 {/* Income vs Expenses */}
@@ -435,10 +453,11 @@ export default function DashboardPage() {
               </div>
             </section>
           </main>
+          )}
         </div>
       </div>
 
-      {/* ── FAB ── */}
+      {/* FAB */}
       <button type="button"
         onClick={() => { setExpenseMessage(null); setExpenseOpen(true); }}
         className="fixed bottom-6 right-6 z-40 grid h-12 w-12 place-items-center rounded-[14px] bg-gradient-to-b from-indigo-500 to-violet-500 text-white shadow-[0px_14px_30px_0px_rgba(99,102,241,0.25)] hover:scale-110 hover:shadow-[0px_18px_40px_0px_rgba(99,102,241,0.4)] active:scale-95 transition-all duration-200"
@@ -446,7 +465,7 @@ export default function DashboardPage() {
         <PlusIcon className="h-5 w-5" />
       </button>
 
-      {/* ── Add expense modal ── */}
+      {/* Add expense modal */}
       {expenseOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-6" role="dialog" aria-modal="true">
           <motion.div className="absolute inset-0 bg-black/60"

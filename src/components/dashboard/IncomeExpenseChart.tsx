@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
+import { ChartTooltip } from "@/components/ui/chart-tooltip";
 
 const data = [
   { month: "Oct", income: 5200, expenses: 3800 },
@@ -19,36 +20,6 @@ const data = [
   { month: "Feb", income: 5400, expenses: 4100 },
   { month: "Mar", income: 5200, expenses: 3900 },
 ];
-
-interface TooltipProps {
-  active?: boolean;
-  payload?: Array<{ value: number; name: string }>;
-  label?: string;
-}
-
-function CustomTooltip({ active, payload, label }: TooltipProps) {
-  if (!active || !payload?.length) return null;
-  return (
-    <div
-      style={{
-        background: "#1a1f3a",
-        border: "1px solid #1e2640",
-        borderRadius: "12px",
-        padding: "10px 14px",
-      }}
-    >
-      <p style={{ color: "#94a3b8", fontSize: 11, fontWeight: 600, marginBottom: 6 }}>
-        {label}
-      </p>
-      <p style={{ color: "#818cf8", fontSize: 12, marginBottom: 3 }}>
-        Income: ${payload[0]?.value?.toLocaleString()}
-      </p>
-      <p style={{ color: "#f87171", fontSize: 12 }}>
-        Expenses: ${payload[1]?.value?.toLocaleString()}
-      </p>
-    </div>
-  );
-}
 
 export default function IncomeExpenseChart() {
   return (
@@ -87,7 +58,7 @@ export default function IncomeExpenseChart() {
           />
 
           <Tooltip
-            content={<CustomTooltip />}
+            content={<ChartTooltip />}
             cursor={{ stroke: "#2e3650", strokeWidth: 1 }}
           />
 
